@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Login from './Components/Login';
+import UserProfile from './Components/UserProfile';
+import SportCards from './Components/SportCards';
+import { getUserData } from './Service/UserService';
+
 
 function App() {
+  const userData = getUserData();  // Cargamos los datos del usuario y deportes
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Ruta del login */}
+        <Route path="/login" element={<Login />} />
+
+        {/* Ruta del home */}
+        <Route 
+          path="/home" 
+          element={
+            <div className="app">
+              <header className="user-info">
+                <UserProfile user={userData} />
+              </header>
+              <main className="content">
+                <SportCards sportsData={userData.sportsData} />
+              </main>
+            </div>
+          } 
+        />
+
+        {/* Ruta por defecto: redirige al login */}
+        <Route path="*" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 
